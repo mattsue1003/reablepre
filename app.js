@@ -27,6 +27,10 @@ const goalSelect = document.querySelector("#goalSelect");
 const today = new Date().toISOString().slice(0, 10);
 prescriptionDate.value = today;
 
+const PDF_PAGE_WIDTH = 1240;
+const PDF_PAGE_HEIGHT = 1754;
+const PDF_SCALE = 2;
+
 let isDownloadingPdf = false;
 
 function initFilters() {
@@ -160,6 +164,57 @@ function triggerBlobDownload(blob, fileName) {
   }, 60000);
 }
 
+async function copyText(value) {
+  if (navigator.clipboard?.writeText && window.isSecureContext) {
+    await navigator.clipboard.writeText(value);
+    return true;
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = value;
+  textarea.setAttribute("readonly", "");
+  textarea.style.position = "fixed";
+  textarea.style.top = "-999px";
+  textarea.style.left = "-999px";
+  document.body.appendChild(textarea);
+  textarea.select();
+  const copied = document.execCommand("copy");
+  textarea.remove();
+  return copied;
+}
+
+function prefersShareSheet() {
+  return Boolean(navigator.share) && (window.matchMedia("(max-width: 760px)").matches || navigator.maxTouchPoints > 0);
+}
+
+async function shareOrCopyTextPrescription() {
+  const text = textPrescription();
+  const title = "居家復健復能處方箋";
+
+  if (prefersShareSheet()) {
+    try {
+      await copyText(text);
+      await navigator.share({ title, text });
+      setDownloadStatus("文字已複製並開啟分享", "success");
+      return;
+    } catch (error) {
+      if (error.name === "AbortError") {
+        setDownloadStatus("文字已複製", "success");
+        return;
+      }
+    }
+  }
+
+  try {
+    await copyText(text);
+    setDownloadStatus("文字已複製", "success");
+  } catch (error) {
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    triggerBlobDownload(blob, `復健復能處方箋-${safeFileName(clientName.value)}.txt`);
+    setDownloadStatus("文字檔已送出下載", "success");
+  }
+}
+
 function setDownloadStatus(message, type = "info") {
   if (!downloadStatus) return;
   downloadStatus.textContent = message;
@@ -209,6 +264,8 @@ function drawContainedImage(ctx, image, x, y, width, height) {
   ctx.fillStyle = "#f1f6f3";
   ctx.fillRect(x, y, width, height);
   if (!image) return;
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
   const scale = Math.min(width / image.naturalWidth, height / image.naturalHeight);
   const drawWidth = image.naturalWidth * scale;
   const drawHeight = image.naturalHeight * scale;
@@ -221,16 +278,17 @@ function canEmbedImagesInPdf() {
 
 function makePageCanvas() {
   const canvas = document.createElement("canvas");
-  canvas.width = 1240;
-  canvas.height = 1754;
+  canvas.width = PDF_PAGE_WIDTH * PDF_SCALE;
+  canvas.height = PDF_PAGE_HEIGHT * PDF_SCALE;
   return canvas;
 }
 
 function newPdfPage() {
   const canvas = makePageCanvas();
   const ctx = canvas.getContext("2d");
+  ctx.scale(PDF_SCALE, PDF_SCALE);
   ctx.fillStyle = "#ffffff";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, PDF_PAGE_WIDTH, PDF_PAGE_HEIGHT);
   ctx.fillStyle = "#1c2730";
   ctx.textBaseline = "top";
   return { canvas, ctx };
@@ -281,7 +339,7 @@ function drawPdfMeta(ctx) {
 }
 
 function canvasToJpegBinary(canvas) {
-  const dataUrl = canvas.toDataURL("image/jpeg", 0.92);
+  const dataUrl = canvas.toDataURL("image/jpeg", 0.96);
   const binary = atob(dataUrl.split(",")[1]);
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
@@ -516,8 +574,7 @@ downloadPdfBtn.addEventListener("click", downloadPdf);
 mobileDownloadPdfBtn.addEventListener("click", downloadPdf);
 
 document.querySelector("#downloadTextBtn").addEventListener("click", () => {
-  const blob = new Blob([textPrescription()], { type: "text/plain;charset=utf-8" });
-  triggerBlobDownload(blob, `復健復能處方箋-${safeFileName(clientName.value)}.txt`);
+  shareOrCopyTextPrescription();
 });
 
 initFilters();

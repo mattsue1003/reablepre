@@ -17,6 +17,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
@@ -156,6 +160,23 @@ h2 {
   top: 92px;
 }
 
+.left-panel {
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+  scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
+}
+
+.prescription-panel {
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
+}
+
 .panel-block,
 .exercise-library,
 .preview-shell {
@@ -273,6 +294,7 @@ select:focus {
   background: #fff;
   border: 1px solid var(--line);
   border-radius: 8px;
+  contain: layout paint;
 }
 
 .exercise-card.selected {
@@ -508,7 +530,15 @@ select:focus {
   }
 
   .left-panel {
+    max-height: none;
+    overflow: visible;
     position: static;
+    padding-right: 0;
+  }
+
+  .prescription-panel {
+    max-height: none;
+    overflow: visible;
   }
 
   .header-actions {
@@ -516,8 +546,14 @@ select:focus {
     flex-wrap: wrap;
   }
 
+  .icon-button {
+    width: 54px;
+    flex: 0 0 54px;
+  }
+
   .primary-button {
     flex: 1;
+    min-width: 0;
   }
 
   .download-status {
