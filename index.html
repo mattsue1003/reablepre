@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>復健復能處方箋開立系統</title>
+    <link rel="stylesheet" href="styles.css?v=20260705-pdf-fix-3" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Reablement Prescription Builder</p>
+        <h1>復健復能處方箋開立系統</h1>
+      </div>
+      <div class="header-actions">
+        <button class="icon-button" id="downloadTextBtn" type="button" title="下載文字處方箋" aria-label="下載文字處方箋">
+          <span aria-hidden="true">TXT</span>
+        </button>
+        <button class="primary-button" id="downloadPdfBtn" type="button">下載 PDF</button>
+        <span class="download-status" id="downloadStatus" role="status" aria-live="polite"></span>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="left-panel" aria-label="個案與篩選">
+        <div class="panel-block">
+          <h2>個案資料</h2>
+          <div class="form-grid">
+            <label>
+              個案姓名
+              <input id="clientName" type="text" placeholder="例如：王小明" />
+            </label>
+            <label>
+              開立日期
+              <input id="prescriptionDate" type="date" />
+            </label>
+            <label>
+              治療師
+              <input id="therapistName" type="text" placeholder="治療師姓名" />
+            </label>
+            <label>
+              主要目標
+              <select id="goalSelect">
+                <option value="提升日常活動獨立性">提升日常活動獨立性</option>
+                <option value="改善下肢肌力與步態安全">改善下肢肌力與步態安全</option>
+                <option value="增加關節活動度與疼痛控制">增加關節活動度與疼痛控制</option>
+                <option value="降低跌倒風險">降低跌倒風險</option>
+                <option value="增進上肢功能與自我照顧">增進上肢功能與自我照顧</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div class="panel-block">
+          <h2>資料庫篩選</h2>
+          <label class="search-field">
+            搜尋動作
+            <input id="searchInput" type="search" placeholder="輸入關鍵字、部位或目標" />
+          </label>
+          <div class="segmented" id="categoryFilters" aria-label="動作分類"></div>
+          <div class="check-list" id="tagFilters" aria-label="功能標籤"></div>
+        </div>
+      </section>
+
+      <section class="exercise-library" aria-label="復健復能動作資料庫">
+        <div class="library-head">
+          <div>
+            <h2>動作資料庫</h2>
+            <p id="libraryCount">0 個項目</p>
+          </div>
+          <button class="ghost-button" id="clearSelectionBtn" type="button">清除勾選</button>
+        </div>
+        <div class="exercise-grid" id="exerciseGrid"></div>
+      </section>
+
+      <aside class="prescription-panel" aria-label="處方箋預覽">
+        <div class="preview-shell" id="prescriptionPreview">
+          <div class="rx-header">
+            <div>
+              <p class="eyebrow">Home Program</p>
+              <h2>居家復健復能處方箋</h2>
+            </div>
+            <div class="rx-mark">Rx</div>
+          </div>
+          <dl class="rx-meta">
+            <div><dt>個案</dt><dd id="previewClient">未填寫</dd></div>
+            <div><dt>日期</dt><dd id="previewDate">-</dd></div>
+            <div><dt>治療師</dt><dd id="previewTherapist">未填寫</dd></div>
+            <div><dt>目標</dt><dd id="previewGoal">提升日常活動獨立性</dd></div>
+          </dl>
+          <div class="rx-empty" id="emptyState">請從左側資料庫勾選動作，處方箋會即時產生。</div>
+          <div class="rx-list" id="selectedList"></div>
+          <div class="rx-note">
+            <strong>安全提醒</strong>
+            <p>動作過程若出現胸悶、暈眩、明顯疼痛、呼吸困難或不穩跌倒風險，請立即停止並聯絡治療師或醫療人員。</p>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <nav class="mobile-action-bar" aria-label="手機快速操作">
+      <a class="ghost-button" href="#prescriptionPreview">預覽處方箋</a>
+      <button class="primary-button" id="mobileDownloadPdfBtn" type="button">下載 PDF</button>
+    </nav>
+
+    <script src="exercises-data.js?v=20260705-pdf-fix-3"></script>
+    <script src="app.js?v=20260705-pdf-fix-3"></script>
+  </body>
+</html>
