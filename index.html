@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>復健復能處方箋開立系統</title>
-    <link rel="stylesheet" href="styles.css?v=20260706-top-actions-only-2" />
+    <link rel="stylesheet" href="styles.css?v=20260706-custom-goal" />
   </head>
   <body>
     <header class="app-header">
@@ -47,7 +47,12 @@
                 <option value="增加關節活動度與疼痛控制">增加關節活動度與疼痛控制</option>
                 <option value="降低跌倒風險">降低跌倒風險</option>
                 <option value="增進上肢功能與自我照顧">增進上肢功能與自我照顧</option>
+                <option value="__custom__">自訂目標</option>
               </select>
+            </label>
+            <label class="custom-goal-field" id="customGoalField" hidden>
+              自訂主要目標
+              <input id="customGoalInput" type="text" placeholder="例如：能獨立到市場買菜" />
             </label>
           </div>
         </div>
@@ -99,7 +104,7 @@
       </aside>
     </main>
 
-    <script src="exercises-data.js?v=20260706-top-actions-only-2"></script>
-    <script src="app.js?v=20260706-top-actions-only-2"></script>
+    <script src="exercises-data.js?v=20260706-custom-goal"></script>
+    <script src="app.js?v=20260706-custom-goal"></script>
   </body>
 </html>
