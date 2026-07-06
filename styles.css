@@ -116,12 +116,14 @@ h2 {
 
 .primary-button,
 .ghost-button,
+.secondary-button,
 .icon-button {
   min-height: 40px;
   border: 1px solid transparent;
   border-radius: 8px;
   padding: 0 14px;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .primary-button {
@@ -137,6 +139,13 @@ h2 {
   background: #fff;
   color: var(--accent-dark);
   border-color: var(--line);
+}
+
+.secondary-button {
+  background: #fff;
+  color: var(--accent-dark);
+  border-color: var(--line);
+  min-width: 96px;
 }
 
 .icon-button {
@@ -546,9 +555,9 @@ select:focus {
     flex-wrap: wrap;
   }
 
-  .icon-button {
-    width: 54px;
-    flex: 0 0 54px;
+  .secondary-button {
+    flex: 0 0 auto;
+    min-width: 96px;
   }
 
   .primary-button {

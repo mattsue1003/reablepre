@@ -571,7 +571,7 @@ document.querySelector("#clearSelectionBtn").addEventListener("click", () => {
 });
 
 downloadPdfBtn.addEventListener("click", downloadPdf);
-mobileDownloadPdfBtn.addEventListener("click", downloadPdf);
+if (mobileDownloadPdfBtn) mobileDownloadPdfBtn.addEventListener("click", downloadPdf);
 
 document.querySelector("#downloadTextBtn").addEventListener("click", () => {
   shareOrCopyTextPrescription();
